@@ -1,0 +1,6 @@
+books_apis\BooksAPIs.class
+properties_reading\ReadPropertiesFile.class
+tests\books\BooksTestRunner.class
+tests\HooksHandler.class
+books_apis\BaseAPI.class
+tests\books\BooksStepDefs.class

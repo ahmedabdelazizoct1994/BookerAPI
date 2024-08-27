@@ -1,0 +1,44 @@
+Project Name:
+Automation booking API
+
+Introduction:
+automating booking APis collection in rest assured and cucumber framework with java language
+
+Features:
+Automated testing of API endpoints using Rest Assured
+Handling GET requests to retrieve all booking and specific posts
+Handling POST requests to create new books
+Handling POst request to generate auth token
+Behavior-driven development (BDD) with Cucumber for test scenario definition and readability
+
+Dependencies :
+make sure your pom.xml have all necessary dependency:
+1-maven
+2-cucumber
+3-testng
+4-rest assured
+Installation:
+open your intellij
+open the terminal to clone the project
+once cloned correctly you will see some folders like:
+1:resources: contains our data and urls
+2:src:include some packages containing APIs for books and class to read form properties files
+and cucumber file (fearure and step def and runner to run the all scenarios)
+
+to execute the tests :
+1-open the testng file that containing the test runner of the feature file
+2-click right then choose RUN...
+
+
+Error Cases:
+creation booking error cases:
+
+If the book object is null, the API should return a 400 Bad Request error.
+If the book object does not have a name, the API should return a 400 Bad Request error.
+If the book object does not have an body , the API should return a 400 Bad Request error.
+
+retrieve all books error case:
+If the API is not available, the request should fail with a 503 Service Unavailable error.
+
+I tried to create jenkins file to be pipelined but still trying till not in fixing encountered issues
+Important note: discount any VPNs and proxy to run successfully

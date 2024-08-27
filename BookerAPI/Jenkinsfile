@@ -1,0 +1,64 @@
+properties([
+    parameters([
+        password(name: 'ntPassword', description: 'maskPassword'),
+        string(name: 'xmlfile', defaultValue: 'testng.xml'),
+        choice(choices: "testing-slave2\ntesting-slave", name: 'slave'),
+        string(name: 'gitlabBranch', defaultValue: 'master'),
+        string(name: 'mailReceiver', defaultValue: '')
+    ])
+])
+
+pipeline {
+    agent {
+        label "${slave}"
+    }
+
+    stages {
+        stage('Clone') {
+            steps {
+                script {
+                    git branch: "${gitlabBranch}", credentialsId: '', url: ''
+                }
+            }
+        }
+
+        stage('Run API') {
+            steps {
+                dir('') {
+                    script {
+                        bat '''
+                            mvn clean test
+                        '''
+                    }
+                }
+            }
+        }
+    }
+
+    post {
+        always {
+            // Archive artifacts
+            archiveArtifacts artifacts: '**/test-output/reports/*', allowEmptyArchive: true
+
+            // Generate HTML report
+            script {
+                def reportFiles = findFiles(glob: '**/test-output/reports/*.txt')
+                def reportContent = ""
+                reportFiles.each { file ->
+                    reportContent += file.read()
+                }
+                writeFile file: 'report.html', text: reportContent
+            }
+
+            // Send email notification
+            emailext (
+                subject: "Build Status: ${currentBuild.currentResult}",
+                body: "The build ${currentBuild.currentResult}.\n\nPlease check the console output for more details.",
+                recipientProviders: [developers()],
+                attachLog: true,
+                attachmentsPattern: 'report.html',
+                compressLog: true
+            )
+        }
+    }
+}
